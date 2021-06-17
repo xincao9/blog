@@ -85,7 +85,7 @@
         
   
     <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/06/17/grpc%E5%BC%80%E5%A7%8B/">grpc开始</a>
+      <a class="p-name article-title" href="/2021/06/17/grpc%E5%BC%80%E5%A7%8B/">grpc快速开始</a>
     </h1>
   
 
@@ -93,14 +93,54 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        
+        <p>依赖protobuf，如果没有 <a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf%E8%87%AA%E8%A1%8C%E5%AE%89%E8%A3%85">https://github.com/protocolbuffers/protobuf自行安装</a></p>
+<p><strong>参考安装</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">进入页面</span><br><span class="line"></span><br><span class="line">https://github.com/protocolbuffers/protobuf/releases</span><br><span class="line"></span><br><span class="line">下载最新的protoc</span><br><span class="line"></span><br><span class="line">protoc-3.17.3-osx-x86_64.zip</span><br><span class="line"></span><br><span class="line">解压至安装目录</span><br><span class="line"></span><br><span class="line">sudo unzip protoc-3.17.3-osx-x86_64.zip -d /usr/local/</span><br><span class="line"></span><br><span class="line">创建软链</span><br><span class="line"></span><br><span class="line">sudo ln -s protoc-3.17.3-osx-x86_64 protoc</span><br><span class="line"> </span><br><span class="line">添加环境变量（eg: ~/.bash_profile）</span><br><span class="line"></span><br><span class="line">export PROTOC_HOME=/usr/local/protoc</span><br><span class="line">export PATH=$PROTOC_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建maven项目"><a href="#创建maven项目" class="headerlink" title="创建maven项目"></a>创建maven项目</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn archetype:generate -DgroupId=com.demo -DartifactId=grpc</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加maven-jar-和-build-plugin-依赖"><a href="#添加maven-jar-和-build-plugin-依赖" class="headerlink" title="添加maven jar 和 build plugin 依赖"></a>添加maven jar 和 build plugin 依赖</h3><ul>
+<li>jar依赖</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;io.grpc&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;grpc-netty-shaded&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;1.38.0&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;io.grpc&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;grpc-protobuf&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;1.38.0&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;io.grpc&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;grpc-stub&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;1.38.0&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>build plugin依赖</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;build&gt;</span><br><span class="line">    &lt;extensions&gt;</span><br><span class="line">        &lt;extension&gt;</span><br><span class="line">            &lt;groupId&gt;kr.motd.maven&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;os-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.6.2&lt;/version&gt;</span><br><span class="line">        &lt;/extension&gt;</span><br><span class="line">    &lt;/extensions&gt;</span><br><span class="line">    &lt;plugins&gt;</span><br><span class="line">        &lt;plugin&gt;</span><br><span class="line">            &lt;groupId&gt;org.xolstice.maven.plugins&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;protobuf-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;0.6.1&lt;/version&gt;</span><br><span class="line">            &lt;configuration&gt;</span><br><span class="line">                &lt;protocArtifact&gt;com.google.protobuf:protoc:3.12.0:exe:$&#123;os.detected.classifier&#125;&lt;/protocArtifact&gt;</span><br><span class="line">                &lt;pluginId&gt;grpc-java&lt;/pluginId&gt;</span><br><span class="line">                &lt;pluginArtifact&gt;io.grpc:protoc-gen-grpc-java:1.38.0:exe:$&#123;os.detected.classifier&#125;&lt;/pluginArtifact&gt;</span><br><span class="line">            &lt;/configuration&gt;</span><br><span class="line">            &lt;executions&gt;</span><br><span class="line">                &lt;execution&gt;</span><br><span class="line">                    &lt;goals&gt;</span><br><span class="line">                        &lt;goal&gt;compile&lt;/goal&gt;</span><br><span class="line">                        &lt;goal&gt;compile-custom&lt;/goal&gt;</span><br><span class="line">                    &lt;/goals&gt;</span><br><span class="line">                &lt;/execution&gt;</span><br><span class="line">            &lt;/executions&gt;</span><br><span class="line">        &lt;/plugin&gt;</span><br><span class="line">    &lt;/plugins&gt;</span><br><span class="line">&lt;/build&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="定义protobuffer-IDL文件-存放到-src-main-proto目录"><a href="#定义protobuffer-IDL文件-存放到-src-main-proto目录" class="headerlink" title="定义protobuffer IDL文件, 存放到 src/main/proto目录"></a>定义protobuffer IDL文件, 存放到 src/main/proto目录</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">syntax = &quot;proto3&quot;;</span><br><span class="line"></span><br><span class="line">package demo;</span><br><span class="line"></span><br><span class="line">option java_package = &quot;com.demo.grpc.stub&quot;;</span><br><span class="line"></span><br><span class="line">// The greeting service definition.</span><br><span class="line">service Greeter &#123;</span><br><span class="line">    // Sends a greeting</span><br><span class="line">    rpc SayHello (HelloRequest) returns (HelloReply) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// The request message containing the user&#x27;s name.</span><br><span class="line">message HelloRequest &#123;</span><br><span class="line">    string name = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// The response message containing the greetings</span><br><span class="line">message HelloReply &#123;</span><br><span class="line">    string message = 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成stub文件"><a href="#生成stub文件" class="headerlink" title="生成stub文件"></a>生成stub文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean package</span><br></pre></td></tr></table></figure>
+
+<p><code>生成后的stub文件位于 target/generated-sources/protobuf/grpc-java, target/generated-sources/protobuf/java 为了在idea中方便代码引用，需要将这两个目录标记为为source root</code></p>
+<h3 id="实现服务provider"><a href="#实现服务provider" class="headerlink" title="实现服务provider"></a>实现服务provider</h3><ul>
+<li>实现服务方法</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class GreeterImpl extends GreeterGrpc.GreeterImplBase &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void sayHello(Helloworld.HelloRequest req, StreamObserver&lt;Helloworld.HelloReply&gt; responseObserver) &#123;</span><br><span class="line">        Helloworld.HelloReply reply = Helloworld.HelloReply.newBuilder().setMessage(&quot;Hello &quot; + req.getName()).build();</span><br><span class="line">        responseObserver.onNext(reply);</span><br><span class="line">        responseObserver.onCompleted();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动服务</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class Bootstrap &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws IOException, InterruptedException &#123;</span><br><span class="line">        Server server = ServerBuilder.forPort(50051)</span><br><span class="line">            .addService(new GreeterImpl())</span><br><span class="line">            .build()</span><br><span class="line">            .start();</span><br><span class="line">        server.awaitTermination();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="实现服务consumer"><a href="#实现服务consumer" class="headerlink" title="实现服务consumer"></a>实现服务consumer</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class Bootstrap &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String... args) throws InterruptedException &#123;</span><br><span class="line">        ManagedChannel channel = ManagedChannelBuilder.forTarget(&quot;localhost:50051&quot;)</span><br><span class="line">            .usePlaintext()</span><br><span class="line">            .build();</span><br><span class="line">        try &#123;</span><br><span class="line">            GreeterGrpc.GreeterBlockingStub blockingStub = GreeterGrpc.newBlockingStub(channel);</span><br><span class="line">            Helloworld.HelloRequest request = Helloworld.HelloRequest.newBuilder().setName(&quot;world&quot;).build();</span><br><span class="line">            try &#123;</span><br><span class="line">                Helloworld.HelloReply response = blockingStub.sayHello(request);</span><br><span class="line">                System.out.println(&quot;Greeting: &quot; + response.getMessage());</span><br><span class="line">            &#125; catch (StatusRuntimeException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf">protobuf</a></li>
+<li><a target="_blank" rel="noopener" href="https://grpc.io/docs/languages/java/quickstart/">grpc quickstart</a></li>
+<li><a target="_blank" rel="noopener" href="https://grpc.io/">grpc</a></li>
+</ul>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://xincao9.github.io/2021/06/17/grpc%E5%BC%80%E5%A7%8B/" data-id="ckq0b1kib0000iowmht4fg7hf" data-title="grpc开始" class="article-share-link">Share</a>
+      <a data-url="https://xincao9.github.io/2021/06/17/grpc%E5%BC%80%E5%A7%8B/" data-id="ckq0b1kib0000iowmht4fg7hf" data-title="grpc快速开始" class="article-share-link">Share</a>
       
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grpc-protobuffer-java/" rel="tag">grpc, protobuffer, java</a></li></ul>
+
     </footer>
   </div>
   
@@ -170,9 +210,23 @@
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/grpc-protobuffer-java/" rel="tag">grpc, protobuffer, java</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/grpc-protobuffer-java/" style="font-size: 10px;">grpc, protobuffer, java</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
@@ -191,7 +245,7 @@
       <ul>
         
           <li>
-            <a href="/2021/06/17/grpc%E5%BC%80%E5%A7%8B/">grpc开始</a>
+            <a href="/2021/06/17/grpc%E5%BC%80%E5%A7%8B/">grpc快速开始</a>
           </li>
         
           <li>
